@@ -20,6 +20,7 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   sockets = [];
 
   async handleConnection(socket: WebSocket) {
+    socket['id'] = String(Number(new Date()));
     socket['nickname'] = 'Anonymous';
     this.sockets.push(socket);
     console.log('Connected to Server!');
@@ -40,7 +41,8 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
     @MessageBody() payload: string,
   ) {
     this.sockets.forEach((socket) => {
-      socket.send(makeMessage('message', `${client.nickname} : ${payload}`));
+      if (socket.id != client.id)
+        socket.send(makeMessage('message', `${client.nickname} : ${payload}`));
     });
   }
 
