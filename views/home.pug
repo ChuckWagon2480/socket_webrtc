@@ -12,8 +12,11 @@ html(lang="en")
       h1 It works!
     main
       h2 Welcome to Socket_WebRTC
+      form#nick
+        input(type ="text" placeholer="choose a nickname",required)
+        button Save
       ul 
-      form
+      form#message
         input(type="text" placeholer="Write your message",required)
         button Send
     script(src="../js/app.js") 

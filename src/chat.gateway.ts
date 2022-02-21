@@ -1,4 +1,6 @@
 import {
+  ConnectedSocket,
+  MessageBody,
   OnGatewayConnection,
   OnGatewayDisconnect,
   SubscribeMessage,
@@ -7,6 +9,10 @@ import {
 } from '@nestjs/websockets';
 import { Server, WebSocket } from 'ws';
 
+function makeMessage(event: string, data: string) {
+  return JSON.stringify({ event, data });
+}
+
 @WebSocketGateway(8080)
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   @WebSocketServer()
@@ -14,18 +20,35 @@ export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
   sockets = [];
 
   async handleConnection(socket: WebSocket) {
+    socket['nickname'] = 'Anonymous';
     this.sockets.push(socket);
     console.log('Connected to Server!');
-    socket.send(`Hello! Now ${this.sockets.length} members here!!`);
+    socket.send(
+      makeMessage(
+        'message',
+        `Hello! Now ${this.sockets.length} members here!!`,
+      ),
+    );
   }
   async handleDisconnect() {
     console.log('Disconnected from the Brower.');
   }
 
   @SubscribeMessage('message')
-  handleMessage(client: any, payload: any) {
+  handleMessage(
+    @ConnectedSocket() client: any,
+    @MessageBody() payload: string,
+  ) {
     this.sockets.forEach((socket) => {
-      socket.send(payload);
+      socket.send(makeMessage('message', `${client.nickname} : ${payload}`));
     });
+  }
+
+  @SubscribeMessage('nick')
+  handleNick(
+    @ConnectedSocket() client: WebSocket,
+    @MessageBody() payload: string,
+  ) {
+    client['nickname'] = payload;
   }
 }
