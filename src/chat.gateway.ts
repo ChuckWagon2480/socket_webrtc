@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import {
   ConnectedSocket,
   MessageBody,
@@ -7,50 +8,62 @@ import {
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server, WebSocket } from 'ws';
+import { Server, Socket } from 'socket.io';
 
 function makeMessage(event: string, data: string) {
   return JSON.stringify({ event, data });
 }
 
-@WebSocketGateway(8080)
+@WebSocketGateway()
 export class ChatGateway implements OnGatewayConnection, OnGatewayDisconnect {
+  private static readonly logger = new Logger(ChatGateway.name);
+
   @WebSocketServer()
   server: Server;
-  sockets = [];
 
-  async handleConnection(socket: WebSocket) {
-    socket['id'] = String(Number(new Date()));
-    socket['nickname'] = 'Anonymous';
-    this.sockets.push(socket);
-    console.log('Connected to Server!');
-    socket.send(
-      makeMessage(
-        'message',
-        `Hello! Now ${this.sockets.length} members here!!`,
-      ),
+  afterInit() {
+    ChatGateway.logger.debug(`Socket Server Init Complete`);
+  }
+
+  async handleConnection(client: Socket) {
+    client['nickname'] = 'Anonymous';
+
+    ChatGateway.logger.debug(
+      `${client.id}(${client.handshake.query['username']}) is connected!`,
     );
+    client.send(makeMessage('message', `Hello!`));
   }
   async handleDisconnect() {
     console.log('Disconnected from the Brower.');
   }
 
-  @SubscribeMessage('message')
-  handleMessage(
-    @ConnectedSocket() client: any,
-    @MessageBody() payload: string,
+  @SubscribeMessage('enter_room')
+  async handleRoom(
+    @ConnectedSocket() client: Socket,
+    @MessageBody() payload: any,
   ) {
-    this.sockets.forEach((socket) => {
-      if (socket.id != client.id)
-        socket.send(makeMessage('message', `${client.nickname} : ${payload}`));
-    });
+    client.join(payload.data);
+
+    return '[OK] Joined room!';
+    // return 시켜서 client의 ack function을 실행시킬 수 있다.
   }
 
-  @SubscribeMessage('nick')
-  handleNick(
-    @ConnectedSocket() client: WebSocket,
-    @MessageBody() payload: string,
-  ) {
-    client['nickname'] = payload;
-  }
+  // @SubscribeMessage('message')
+  // handleMessage(
+  //   @ConnectedSocket() client: any,
+  //   @MessageBody() payload: string,
+  // ) {
+  //   this.sockets.forEach((socket) => {
+  //     if (socket.id != client.id)
+  //       socket.send(makeMessage('message', `${client.nickname} : ${payload}`));
+  //   });
+  // }
+
+  // @SubscribeMessage('nick')
+  // handleNick(
+  //   @ConnectedSocket() client: Socket,
+  //   @MessageBody() payload: string,
+  // ) {
+  //   client['nickname'] = payload;
+  // }
 }

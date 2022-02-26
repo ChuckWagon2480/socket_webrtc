@@ -12,11 +12,16 @@ html(lang="en")
       h1 It works!
     main
       h2 Welcome to Socket_WebRTC
-      form#nick
-        input(type ="text" placeholer="choose a nickname",required)
-        button Save
-      ul(style="list-style:none;width:850px;display:block;padding:0;")
-      form#message
-        input(type="text" placeholer="Write your message",required)
-        button Send
-    script(src="../js/app.js") 
+      div#welcome
+        form
+          input(placeholer="room name", required, type="text")
+          button Enter Room
+      //- form#nick
+      //-   input(type ="text" placeholer="choose a nickname",required)
+      //-   button Save
+      //- ul(style="list-style:none;width:850px;display:block;padding:0;")
+      //- form#message
+      //-   input(type="text" placeholer="Write your message",required)
+      //-   button Send
+    script(src="/socket.io/socket.io.js") 
+    script(src="/js/app.js") 
