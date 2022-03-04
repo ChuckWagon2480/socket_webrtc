@@ -16,4 +16,10 @@ export class AppController {
   chat() {
     return;
   }
+
+  @Get('/video')
+  @Render('video')
+  video() {
+    return;
+  }
 }
