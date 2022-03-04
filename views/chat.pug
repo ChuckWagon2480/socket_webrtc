@@ -1,0 +1,35 @@
+doctype html
+html(lang="en")
+  head
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible" content="IE=edge")
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    link(rel="stylesheet" href="https://unpkg.com/mvp.css")
+    title Socket_WebRTC
+    style form, input{display:inline-block;}
+  body
+    header(style="padding-bottom:0")
+      h2 Welcome to Socket_WebRTC
+    main(style="padding-top:0;padding-bottom:20px;")
+      section#welcome
+        form
+          input(placeholder="room name" style="display:inline;margin:1.5rem;" type="text", required)
+          button Enter Room
+        form#nick
+          input(type ="text" placeholder="choose a nickname" style="margin:1.5rem;", required)
+          button Save
+      section#room(hidden)
+        header(style="padding-bottom:0")
+          h2#roomName
+        aside(style="width: 800px;height: 500px;")
+          ul(style="list-style:none;width:780px;height:480px;overflow-y: scroll; display:block;padding:10px;margin:0px;")
+        form#message
+          input(placeholder="message" type="text" style="margin:1.5rem;", required)
+          button Send
+        form#nick
+          input(type ="text" placeholder="choose a nickname" style="margin:1.5rem;", required)
+          button Save
+
+
+    script(src="http://localhost:8080/socket.io/socket.io.js") 
+    script(src="/js/app.js") 

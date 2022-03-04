@@ -2,26 +2,17 @@ doctype html
 html(lang="en")
   head
     meta(charset="UTF-8")
-    meta(http-equiv="X-UA-Compatible" content="IE=edge")
-    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel="stylesheet" href="https://unpkg.com/mvp.css")
-    title Document
-
-  body
-    header 
-      h1 It works!
-    main
-      h2 Welcome to Socket_WebRTC
-      div#welcome
-        form
-          input(placeholer="room name", required, type="text")
-          button Enter Room
-      //- form#nick
-      //-   input(type ="text" placeholer="choose a nickname",required)
-      //-   button Save
-      //- ul(style="list-style:none;width:850px;display:block;padding:0;")
-      //- form#message
-      //-   input(type="text" placeholer="Write your message",required)
-      //-   button Send
-    script(src="/socket.io/socket.io.js") 
-    script(src="/js/app.js") 
+    title Socket_WebRTC
+    style a{padding:10px;margin:10px;}
+  body 
+    header
+      h1 Welcome to Socket_WebRTC
+    main 
+      p(style="text-align: center;")
+        a(href="/chat")
+          b Chat ➔
+        a(href="/video")
+          b Video Call ➔
