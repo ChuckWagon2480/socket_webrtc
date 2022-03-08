@@ -4,6 +4,7 @@ import { join } from 'path';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { ChatGateway } from './chat.gateway';
+import { VideoGateway } from './video.gateway';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { ChatGateway } from './chat.gateway';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService, ChatGateway],
+  providers: [AppService, ChatGateway, VideoGateway],
 })
 export class AppModule {}

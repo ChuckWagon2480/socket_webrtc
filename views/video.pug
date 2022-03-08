@@ -13,9 +13,16 @@ html(lang="en")
       h2 Welcome to Socket_WebRTC
     main(style="padding-top:0;padding-bottom:20px;")
       section 
-        video#myVideo(autoplay, playsinline, width=400, height=400)
-        p(style="text-align:center;")
-          button#sound Mute
-          button#video Video Off
-        select#cameras
+        div#welcome
+          form#roomName
+            input(placeholder="room name" style="display:inline;margin:1.5rem;" type="text", required)
+            button Enter Room
+        div#call
+          video#myVideo(autoplay, playsinline, width=400, height=400)
+          p(style="text-align:center;")
+            button#sound Mute
+            button#video Video Off
+          select#cameras
+
+    script(src="http://localhost:8081/socket.io/socket.io.js") 
     script(src="/js/video.js") 

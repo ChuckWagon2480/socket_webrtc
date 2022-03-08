@@ -1,6 +1,6 @@
 const messageForm = document.querySelector('#message');
 const nickForm = document.querySelector('#nick');
-const socket = io('http://localhost:8080/chat', {
+const socket = io('ws://localhost:8080/chat', {
   transports: ['websocket'],
   jsonp: false,
 });
