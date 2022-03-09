@@ -100,18 +100,23 @@ camerasSelect.addEventListener('input', cameraHandler);
 socket.on('welcome', async () => {
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
-  socket.emit('offer', offer, roomName);
+  socket.emit('offer', { offer, roomName });
 });
 
 socket.on('offer', async (offer) => {
   myPeerConnection.setRemoteDescription(offer);
+
   const answer = await myPeerConnection.createAnswer();
   myPeerConnection.setLocalDescription(answer);
-  socket.emit('answer', answer);
+  socket.emit('answer', { answer, roomName });
 });
 
 socket.on('answer', (answer) => {
   myPeerConnection.setRemoteDescription(answer);
+});
+
+socket.on('ice', (ice) => {
+  myPeerConnection.addIceCandidate(ice);
 });
 
 async function initCall() {
@@ -128,7 +133,7 @@ async function handleRoomNameSubmit(event) {
   const input = roomNameForm.querySelector('input');
   roomName = input.value;
   await initCall();
-  socket.emit('join_room', roomName);
+  socket.emit('join_room', { roomName });
   input.value = '';
 }
 roomNameForm.addEventListener('submit', handleRoomNameSubmit);
@@ -137,7 +142,19 @@ roomNameForm.addEventListener('submit', handleRoomNameSubmit);
 
 function makeConnection() {
   myPeerConnection = new RTCPeerConnection();
+  myPeerConnection.addEventListener('icecandidate', handleIce);
+  // myPeerConnection.addEventListener('addstream', handleAddStream); // addstream is deprecated.
+  myPeerConnection.addEventListener('track', handleAddStream); // addstream is deprecated.
   myStream.getTracks().forEach((track) => {
     myPeerConnection.addTrack(track, myStream);
   });
+}
+
+function handleIce(data) {
+  socket.emit('ice', { ice: data.candidate, roomName: roomName });
+}
+
+function handleAddStream(data) {
+  const peerVideo = document.getElementById('peerVideo');
+  peerVideo.srcObject = data.streams[0];
 }
