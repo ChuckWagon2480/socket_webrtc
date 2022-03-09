@@ -1,6 +1,7 @@
 const messageForm = document.querySelector('#message');
-const nickForm = document.querySelector('#nick');
-const socket = io('ws://localhost:8080/chat', {
+const nickForm1 = document.querySelector('#nick1');
+const nickForm2 = document.querySelector('#nick2');
+const socket = io('ws://' + location.host + '/chat', {
   transports: ['websocket'],
   jsonp: false,
 });
@@ -71,14 +72,22 @@ function handleMessageSubmit(event) {
   messageInput.value = '';
 }
 
-function handleNickSubmit(event) {
+function handleNickSubmit1(event) {
   event.preventDefault();
-  const nickInput = nickForm.querySelector('input');
+  const nickInput = nickForm1.querySelector('input');
+  socket.emit('nick', { nick: nickInput.value });
+
+  nickInput.value = '';
+}
+function handleNickSubmit2(event) {
+  event.preventDefault();
+  const nickInput = nickForm2.querySelector('input');
   socket.emit('nick', { nick: nickInput.value });
 
   nickInput.value = '';
 }
 
 messageForm.addEventListener('submit', handleMessageSubmit);
-nickForm.addEventListener('submit', handleNickSubmit);
+nickForm1.addEventListener('submit', handleNickSubmit1);
+nickForm2.addEventListener('submit', handleNickSubmit2);
 roomNameForm.addEventListener('submit', handleRoomSubmit);

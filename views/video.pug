@@ -4,6 +4,7 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     link(rel="stylesheet" href="https://unpkg.com/mvp.css")
     link(rel="icon" href="data:;base64,iVBORw0KGgo=")
     title Socket_WebRTC
@@ -25,5 +26,5 @@ html(lang="en")
             button#video Video Off
           select#cameras
 
-    script(src="http://localhost:8081/socket.io/socket.io.js") 
+    script(src="/socket.io/socket.io.js") 
     script(src="/js/video.js") 

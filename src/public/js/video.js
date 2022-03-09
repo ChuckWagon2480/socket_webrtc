@@ -1,4 +1,4 @@
-const socket = io('ws://localhost:8081/video', {
+const socket = io('ws://' + location.host + '/video', {
   transports: ['websocket'],
   jsonp: false,
 });
@@ -90,6 +90,13 @@ function videoHandler() {
 
 async function cameraHandler() {
   await getMedia(camerasSelect.value);
+  if (myPeerConnection) {
+    const videoTrack = myStream.getVideoTracks()[0];
+    const videoSender = myPeerConnection
+      .getSenders()
+      .find((sender) => sender.track.kind === 'video');
+    await videoSender.replaceTrack(videoTrack);
+  }
 }
 
 soundButton.addEventListener('click', soundHandler);
@@ -141,7 +148,19 @@ roomNameForm.addEventListener('submit', handleRoomNameSubmit);
 // RTC Code
 
 function makeConnection() {
-  myPeerConnection = new RTCPeerConnection();
+  myPeerConnection = new RTCPeerConnection({
+    iceServers: [
+      {
+        urls: [
+          'stun:stun.l.google.come:19302',
+          'stun:stun1.l.google.come:19302',
+          'stun:stun2.l.google.come:19302',
+          'stun:stun3.l.google.come:19302',
+          'stun:stun4.l.google.come:19302',
+        ],
+      },
+    ],
+  });
   myPeerConnection.addEventListener('icecandidate', handleIce);
   // myPeerConnection.addEventListener('addstream', handleAddStream); // addstream is deprecated.
   myPeerConnection.addEventListener('track', handleAddStream); // addstream is deprecated.

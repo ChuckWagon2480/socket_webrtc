@@ -4,7 +4,9 @@ html(lang="en")
     meta(charset="UTF-8")
     meta(http-equiv="X-UA-Compatible" content="IE=edge")
     meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    meta(http-equiv="Content-Security-Policy" content="upgrade-insecure-requests")
     link(rel="stylesheet" href="https://unpkg.com/mvp.css")
+    link(rel="icon" href="data:;base64,iVBORw0KGgo=")
     title Socket_WebRTC
     style form, input{display:inline-block;}
   body
@@ -15,7 +17,7 @@ html(lang="en")
         form
           input(placeholder="room name" style="display:inline;margin:1.5rem;" type="text", required)
           button Enter Room
-        form#nick
+        form#nick1
           input(type ="text" placeholder="choose a nickname" style="margin:1.5rem;", required)
           button Save
       section#room(hidden)
@@ -26,10 +28,10 @@ html(lang="en")
         form#message
           input(placeholder="message" type="text" style="margin:1.5rem;", required)
           button Send
-        form#nick
+        form#nick2
           input(type ="text" placeholder="choose a nickname" style="margin:1.5rem;", required)
           button Save
 
 
-    script(src="http://localhost:8080/socket.io/socket.io.js") 
+    script(src="/socket.io/socket.io.js") 
     script(src="/js/app.js") 
