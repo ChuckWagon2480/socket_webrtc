@@ -17,6 +17,7 @@ let isMute = false;
 let isVideoOff = false;
 let roomName;
 let myPeerConnection; // RTC
+let myDataChannel; //DataChannel
 
 async function getMedia(deviceId) {
   const initialConstraints = {
@@ -105,12 +106,25 @@ camerasSelect.addEventListener('input', cameraHandler);
 
 // socket.io
 socket.on('welcome', async () => {
+  myDataChannel = myPeerConnection.createDataChannel('chat'); // offer를 만드는 쪽에서 DataChannel 생성
+  myDataChannel.addEventListener('message', (event) => {
+    console.log(`Message: ${event.data}`);
+  });
+
   const offer = await myPeerConnection.createOffer();
   myPeerConnection.setLocalDescription(offer);
   socket.emit('offer', { offer, roomName });
 });
 
 socket.on('offer', async (offer) => {
+  myPeerConnection.addEventListener('datachannel', (event) => {
+    // offer를 받는 쪽에서 상대가 만든 datachannel을 받아서 양방향 통신한다.
+    myDataChannel = event.channel;
+    myDataChannel.addEventListener('message', (event) => {
+      console.log(`Message: ${event.data}`);
+    });
+  });
+
   myPeerConnection.setRemoteDescription(offer);
 
   const answer = await myPeerConnection.createAnswer();
