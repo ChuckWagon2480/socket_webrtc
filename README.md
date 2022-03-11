@@ -10,6 +10,12 @@
 ## 개발 일지
 * 웹소켓 서버를 만들고 이벤트를 처리할 수 있는 Gateway를 구성한다.
 * 간단한 실시간 채팅을 할 수 있는 웹페이지를 제공한다.
+* 소켓서버를 통해 RTC Connection을 구성한다.
+* DataChannel을 통해 화상회의 중 RTC Connection을 통해 메세지를 전달한다.
+
+## 참고 사이트
+* https://nomadcoders.co/noom (Express.js기반 WebSocket, WebRTC 강의)
+* https://developer.mozilla.org/ko/docs/Web/API/WebRTC_API/Protocols (공식문서)
 
 <!-- Markdown link & img dfn's -->
 [npm-image]: https://img.shields.io/badge/npm-CB3837.svg?&style=for-the-badge&logo=npm&logoColor=white
